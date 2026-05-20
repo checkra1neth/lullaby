@@ -40,6 +40,16 @@ next-env.d.ts
 # scratch / generated assets
 tmp/
 
+# internal notes & design docs
+notes/
+design/
+
+# database migrations
+supabase/migrations/
+
+# tests
+tests/
+
 # supabase local
 supabase/.temp/
 
