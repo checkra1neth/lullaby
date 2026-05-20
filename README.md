@@ -1,5 +1,9 @@
 # 🌙 Lullaby — Personalized AI Lullabies for Your Child
 
+<p align="center">
+  <img src="docs/banner.png" alt="Lullaby — A lullaby made just for your child" width="100%" />
+</p>
+
 > **One-liner:** Parents describe their child's name, mood, and favorite things — and get a unique, studio-quality lullaby generated in seconds.
 
 [![Built with ElevenLabs](https://img.shields.io/badge/ElevenLabs-API-blueviolet)](https://elevenlabs.io)
