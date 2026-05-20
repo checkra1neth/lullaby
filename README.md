@@ -1,36 +1,145 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌙 Lullaby — Personalized AI Lullabies for Your Child
+
+> **One-liner:** Parents describe their child's name, mood, and favorite things — and get a unique, studio-quality lullaby generated in seconds.
+
+[![Built with ElevenLabs](https://img.shields.io/badge/ElevenLabs-API-blueviolet)](https://elevenlabs.io)
+[![Built with Kiro](https://img.shields.io/badge/Built%20with-Kiro-blue)](https://kiro.dev)
+[![Next.js](https://img.shields.io/badge/Next.js-14-black)](https://nextjs.org)
+
+---
+
+## The Problem
+
+Every parent knows the bedtime struggle. Generic lullabies don't calm every child — kids respond to hearing *their own name*, *their favorite animal*, *their mood*. Custom lullabies from musicians cost hundreds of dollars and take weeks. There's no fast, affordable way to get a truly personalized bedtime song.
+
+## The Solution
+
+**Lullaby** generates a one-of-a-kind lullaby in under 2 minutes:
+
+1. Parent fills a simple form — child's name, age, mood, favorite things
+2. AI writes personalized lyrics tailored to the child
+3. ElevenLabs generates expressive vocal narration and music
+4. The tracks are mixed into a polished lullaby delivered via email + in-app library
+
+One strong feature, done well: **a personalized song that makes bedtime magical.**
+
+## Demo
+
+🎬 *[Video link coming soon]*
+
+## How It Works
+
+```
+User Input → AI Lyrics (ElevenLabs Agent) → Voice Generation (ElevenLabs TTS)
+                                           → Music Generation (ElevenLabs Music API)
+                                           → Audio Mixing (FFmpeg) → Delivery
+```
+
+### ElevenLabs Integration
+
+- **Conversational AI Agent** — generates personalized lyrics via a pre-configured agent (`gemini-2.5-flash`)
+- **Text-to-Speech** — narrates the lullaby with expressive, warm voices from curated presets
+- **Music Generation** — creates a unique instrumental track matching the child's mood
+- **Multiple voice options** — parents choose from 2–3 curated voice styles
+
+### Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Framework | Next.js 14 (App Router) |
+| Styling | Tailwind CSS |
+| Auth | Supabase Auth (magic links) |
+| Database | Supabase (PostgreSQL) |
+| Payments | Stripe (one-off + subscription) |
+| AI Lyrics | ElevenLabs Conversational Agent |
+| Voice | ElevenLabs Text-to-Speech API |
+| Music | ElevenLabs Music API |
+| Audio Processing | FFmpeg (fluent-ffmpeg) |
+| Background Jobs | Inngest |
+| Rate Limiting | Upstash Redis |
+| Email Delivery | Resend |
+| Deployment | Vercel |
+| IDE | Kiro (spec-driven development) |
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+
+- npm
+- Supabase project
+- ElevenLabs API key
+- Stripe account (test mode)
+
+### Installation
+
+```bash
+git clone https://github.com/checkra1neth/lullaby.git
+cd lullaby
+npm install
+```
+
+### Environment Variables
+
+```bash
+cp .env.local.example .env.local
+```
+
+Fill in your keys — see `.env.local.example` for all required variables:
+
+- `ELEVENLABS_API_KEY` — your ElevenLabs API key
+- `ELEVENLABS_VOICE_IDS` — JSON array of voice IDs
+- `SUPABASE_URL` / `SUPABASE_ANON_KEY` — Supabase credentials
+- `STRIPE_SECRET_KEY` — Stripe test key
+- `OPENAI_API_KEY` — for lyrics generation fallback
+
+### Run Locally
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+In a separate terminal, start the Inngest dev server:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run inngest:dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Open [http://localhost:3000](http://localhost:3000).
 
-## Learn More
+## Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+app/                  → Next.js pages & API routes
+  _components/        → Shared UI components
+  api/                → Backend endpoints (checkout, preview, webhooks)
+  auth/               → Authentication pages
+  create/             → Lullaby creation form
+  library/            → User's lullaby library
+  orders/             → Order status tracking
+lib/                  → Core business logic
+  elevenlabs/         → ElevenLabs agent integration
+  gen/                → Generation pipeline (lyrics → narration → music → mix)
+  mood/               → Mood-based theming system
+  supabase/           → Database clients
+inngest/              → Background job functions
+supabase/migrations/  → Database schema
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## What Makes It Special
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Real problem, real users** — parents spend real money on personalized children's content
+- **Deep ElevenLabs integration** — uses Agent API, TTS, and Music generation together in a single pipeline
+- **Mood-aware UX** — the entire interface adapts colors and animations based on the selected mood
+- **Production-ready** — auth, payments, rate limiting, email delivery, background processing
+- **Built with Kiro** — spec-driven development with requirements → design → tasks workflow
 
-## Deploy on Vercel
+## Built For
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+[ElevenHacks — Hack #5: Kiro](https://hacks.elevenlabs.io/hackathons/4)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## License
+
+MIT
