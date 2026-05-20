@@ -3,7 +3,7 @@
 > **One-liner:** Parents describe their child's name, mood, and favorite things — and get a unique, studio-quality lullaby generated in seconds.
 
 [![Built with ElevenLabs](https://img.shields.io/badge/ElevenLabs-API-blueviolet)](https://elevenlabs.io)
-[![Built with Kiro](https://img.shields.io/badge/Built%20with-Kiro-blue)](https://kiro.dev)
+[![Stripe](https://img.shields.io/badge/Stripe-Payments-635bff)](https://stripe.com)
 [![Next.js](https://img.shields.io/badge/Next.js-14-black)](https://nextjs.org)
 
 ---
@@ -50,7 +50,7 @@ User Input → AI Lyrics (ElevenLabs Agent) → Voice Generation (ElevenLabs TTS
 | Styling | Tailwind CSS |
 | Auth | Supabase Auth (magic links) |
 | Database | Supabase (PostgreSQL) |
-| Payments | Stripe (one-off + subscription) |
+| Payments | Stripe (Checkout, webhooks, one-off + subscription) |
 | AI Lyrics | ElevenLabs Conversational Agent |
 | Voice | ElevenLabs Text-to-Speech API |
 | Music | ElevenLabs Music API |
@@ -59,7 +59,6 @@ User Input → AI Lyrics (ElevenLabs Agent) → Voice Generation (ElevenLabs TTS
 | Rate Limiting | Upstash Redis |
 | Email Delivery | Resend |
 | Deployment | Vercel |
-| IDE | Kiro (spec-driven development) |
 
 ## Getting Started
 
@@ -129,14 +128,17 @@ supabase/migrations/  → Database schema
 ## What Makes It Special
 
 - **Real problem, real users** — parents spend real money on personalized children's content
+- **Something people will pay for** — clear monetization via one-off purchase and subscription plans through Stripe
 - **Deep ElevenLabs integration** — uses Agent API, TTS, and Music generation together in a single pipeline
+- **Stripe integration** — secure checkout (one-off + subscription), webhooks, test mode payments
 - **Mood-aware UX** — the entire interface adapts colors and animations based on the selected mood
 - **Production-ready** — auth, payments, rate limiting, email delivery, background processing
-- **Built with Kiro** — spec-driven development with requirements → design → tasks workflow
 
 ## Built For
 
-[ElevenHacks — Hack #5: Kiro](https://hacks.elevenlabs.io/hackathons/4)
+[ElevenHacks — Hack #9: Stripe](https://hacks.elevenlabs.io/hackathons/8) — *"Build something people will pay for"*
+
+Built with [ElevenLabs](https://elevenlabs.io) + [Stripe](https://stripe.com)
 
 ---
 
