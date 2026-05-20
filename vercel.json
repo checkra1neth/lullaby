@@ -1,0 +1,16 @@
+{
+  "framework": "nextjs",
+  "buildCommand": "npm run build",
+  "installCommand": "npm install",
+  "functions": {
+    "app/api/inngest/route.ts": {
+      "maxDuration": 300
+    },
+    "app/api/stripe/webhook/route.ts": {
+      "maxDuration": 30
+    },
+    "app/api/preview/route.ts": {
+      "maxDuration": 30
+    }
+  }
+}

@@ -1,0 +1,908 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Brand Palette — deep indigo + warm gold */
+  --bg: #0a0820;
+  --surface-lowest: #08061a;
+  --surface-low: #120f2c;
+  --surface-high: #1a1640;
+  --surface-highest: #241e54;
+  --on-surface: #f5f0eb;
+  --on-surface-v: #b8b0c8;
+  --accent: #f6c177;
+  --accent-dim: #d99f4f;
+  --accent-muted: rgba(246, 193, 119, 0.2);
+
+  /* Glass */
+  --glass-bg: rgba(10, 8, 30, 0.72);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-blur: blur(20px);
+
+  /* Mood (default) */
+  --mood-h: 245;
+  --mood-s: 55%;
+  --mood-l: 70%;
+
+  /* Radius */
+  --radius: 1.25rem;
+  --radius-sm: 0.875rem;
+  --radius-pill: 9999px;
+
+  /* Motion */
+  --motion-fast: 200ms;
+  --motion-medium: 350ms;
+  --motion-slow: 600ms;
+  --motion-mood: 1200ms;
+  --ease-emphasis: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Legacy aliases for backward compatibility */
+  --background: var(--bg);
+  --foreground: var(--on-surface);
+}
+
+body {
+  color: var(--on-surface);
+  background: var(--bg);
+  font-family: var(--font-body), system-ui, sans-serif;
+}
+
+/* ---------------------------------------------------------------------------
+   Glass panel utility
+   --------------------------------------------------------------------------- */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+}
+
+@supports not (backdrop-filter: blur(20px)) {
+  .glass-panel {
+    background: var(--surface-high);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Shared input utility (Create form + Sign-in)
+   --------------------------------------------------------------------------- */
+.ll-input {
+  background: rgba(6, 4, 18, 0.9);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  color: var(--on-surface);
+  padding: 0.55rem 0.75rem;
+  width: 100%;
+  display: block;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  transition: border-color var(--motion-fast) var(--ease-emphasis);
+}
+
+.ll-input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 0;
+  border-color: var(--accent-muted);
+}
+
+.ll-input::placeholder {
+  color: var(--on-surface-v);
+  opacity: 0.75;
+}
+
+.ll-input--error {
+  border-color: rgba(239, 68, 68, 0.6);
+}
+
+/* Focus ring must trump error state during interaction */
+.ll-input--error:focus-visible {
+  border-color: var(--accent-muted);
+}
+
+/* ---------------------------------------------------------------------------
+   Mood-aware background
+   --------------------------------------------------------------------------- */
+.mood-bg {
+  position: fixed;
+  top: 0;
+  left: -20px;
+  right: -20px;
+  height: calc(100vh + 220px);
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 40% at 50% 0%, hsla(var(--mood-h), var(--mood-s), var(--mood-l), 0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 30% at 20% 80%, hsla(var(--mood-h), var(--mood-s), var(--mood-l), 0.04) 0%, transparent 60%),
+    radial-gradient(circle at center, rgba(10, 8, 32, 0.2) 0%, rgba(10, 8, 32, 0.6) 100%),
+    url('/dreamy_lullaby_bg.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: background var(--motion-mood) var(--ease-emphasis);
+  will-change: transform;
+}
+
+/* ---------------------------------------------------------------------------
+   CTA Button
+   --------------------------------------------------------------------------- */
+.cta-btn {
+  position: relative;
+  display: inline-flex;
+  border-radius: var(--radius-pill);
+  padding: 1px;
+  font-weight: 700;
+  cursor: pointer;
+  isolation: isolate;
+  outline: none;
+  text-decoration: none;
+}
+
+.cta-glow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--accent), var(--accent-dim));
+  border-radius: var(--radius-pill);
+  opacity: 0.4;
+  filter: blur(16px);
+  transition: opacity var(--motion-medium) var(--ease-emphasis);
+}
+
+.cta-inner {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.9rem 2rem;
+  background: linear-gradient(135deg, var(--accent), var(--accent-dim));
+  border-radius: var(--radius-pill);
+  color: var(--bg);
+  box-shadow: 0 8px 32px rgba(246, 193, 119, 0.15);
+  font-size: 0.875rem;
+  line-height: 1;
+}
+
+.cta-btn[data-fullwidth] {
+  display: flex;
+  width: 100%;
+}
+
+.cta-btn[data-fullwidth] .cta-inner {
+  flex: 1;
+  justify-content: center;
+}
+
+.cta-btn[data-compact] .cta-inner {
+  padding: 0.6rem 1.25rem;
+  font-size: 0.8rem;
+}
+
+.cta-btn:hover .cta-glow {
+  opacity: 0.8;
+}
+
+.cta-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ---------------------------------------------------------------------------
+   Ring Progress
+   --------------------------------------------------------------------------- */
+.ring-progress {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ring-track {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.04);
+  stroke-width: 3;
+}
+
+.ring-arc {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 339.292;
+  stroke-dashoffset: 339.292;
+  transition: stroke-dashoffset var(--motion-slow) var(--ease-emphasis);
+  filter: drop-shadow(0 0 8px rgba(246, 193, 119, 0.35));
+}
+
+.ring-center {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------------------------------------------------------------------------
+   Step Card
+   --------------------------------------------------------------------------- */
+.step-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.55rem 1rem;
+  border-radius: var(--radius-pill);
+  --delay: calc(var(--index, 0) * 120ms);
+  animation: fadeUp var(--motion-medium) var(--ease-emphasis);
+  animation-delay: var(--delay);
+  animation-fill-mode: backwards;
+}
+
+.step-icon-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: clamp(36px, 10vw, 42px);
+  height: clamp(36px, 10vw, 42px);
+  border-radius: 50%;
+  background: var(--surface-high);
+  color: var(--on-surface-v);
+  transition: background var(--motion-fast) var(--ease-emphasis);
+}
+
+.step-card[data-state="done"] .step-icon-circle {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+.step-card[data-state="active"] .step-icon-circle {
+  background: var(--surface-highest);
+  color: var(--accent);
+}
+
+.step-badge {
+  font-size: 0.75rem;
+  color: var(--on-surface-v);
+}
+
+.step-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--glass-border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+.step-check {
+  width: 16px;
+  height: 16px;
+  color: var(--accent);
+}
+
+/* ---------------------------------------------------------------------------
+   Price card hover
+   --------------------------------------------------------------------------- */
+.price-card {
+  transition: transform var(--motion-fast) var(--ease-emphasis),
+    border-color var(--motion-fast) var(--ease-emphasis);
+}
+
+.price-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ---------------------------------------------------------------------------
+   Form lockout
+   --------------------------------------------------------------------------- */
+form[data-locked="true"] {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+/* ---------------------------------------------------------------------------
+   Library card stagger
+   --------------------------------------------------------------------------- */
+.lib-card {
+  --delay: calc(var(--index, 0) * 80ms);
+  animation: fadeUp var(--motion-medium) var(--ease-emphasis);
+  animation-delay: var(--delay);
+  animation-fill-mode: backwards;
+}
+
+/* ---------------------------------------------------------------------------
+   Player panel stagger
+   --------------------------------------------------------------------------- */
+.player-anim {
+  --delay: calc(var(--index, 0) * 180ms);
+  animation: fadeUp var(--motion-medium) var(--ease-emphasis);
+  animation-delay: var(--delay);
+  animation-fill-mode: backwards;
+}
+
+/* ---------------------------------------------------------------------------
+   Preview panel entrance
+   --------------------------------------------------------------------------- */
+.preview-anim {
+  animation: fadeUp 350ms var(--ease-emphasis);
+}
+
+/* ---------------------------------------------------------------------------
+   Hero entrance choreography
+   --------------------------------------------------------------------------- */
+.hero-anim {
+  animation: fadeUp var(--motion-medium) var(--ease-emphasis);
+  animation-delay: var(--delay, 0ms);
+  animation-fill-mode: backwards;
+}
+
+/* ---------------------------------------------------------------------------
+   Page entrance
+   --------------------------------------------------------------------------- */
+.page-anim {
+  animation: fadeUp var(--motion-medium) var(--ease-emphasis);
+}
+
+/* ---------------------------------------------------------------------------
+   Keyframes
+   --------------------------------------------------------------------------- */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes floatEmoji {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(1) translateY(0);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.05) translateY(-3px);
+  }
+}
+
+@keyframes pvPulse {
+  0%,
+  100% {
+    box-shadow: none;
+  }
+  50% {
+    box-shadow: 0 0 12px rgba(246, 193, 119, 0.18);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Material Symbols Outlined font fallback sizing
+   --------------------------------------------------------------------------- */
+.material-symbols-outlined {
+  display: inline-block;
+  font-family: "Material Symbols Outlined", system-ui, sans-serif;
+  font-size: 24px;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  font-feature-settings: "liga";
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------------------------------------------------------------------------
+   Reduced motion
+   --------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .mood-bg {
+    transition: none;
+  }
+
+  .cta-glow {
+    transition: none;
+  }
+
+  .step-card {
+    animation: none;
+  }
+
+  .step-card[data-state="active"] .step-spinner {
+    animation: none;
+    border: none;
+    border-radius: 0;
+    width: auto;
+    height: auto;
+  }
+
+  .step-card[data-state="active"] .step-spinner::before {
+    content: "hourglass_top";
+    font-family: "Material Symbols Outlined", system-ui, sans-serif;
+    color: var(--accent);
+    font-size: 16px;
+  }
+
+  .lib-card {
+    animation: none;
+  }
+
+  .player-anim {
+    animation: none;
+  }
+
+  .preview-anim {
+    animation: none;
+  }
+
+  .hero-anim {
+    animation: none;
+  }
+
+  .page-anim {
+    animation: none;
+  }
+
+  .price-card {
+    transition: none;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .text-shadow-sm {
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95);
+  }
+  .text-shadow-md {
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.98);
+  }
+  .text-shadow-lg {
+    text-shadow: 0 4px 16px rgba(0, 0, 0, 1.0);
+  }
+}
+
+/* Custom scrollbar for the night theme */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--surface-highest);
+  border-radius: 4px;
+}
+
+/* Audio/video player styling overrides for dark background */
+audio::-webkit-media-controls-panel,
+video::-webkit-media-controls-panel {
+  background: var(--surface-high);
+}
+
+/* ===========================================================================
+   Celestial Editorial Grid & Polaroid Design System (Behance Inspired)
+   =========================================================================== */
+
+/* Fine elegant golden grid divider lines */
+.celestial-border-t {
+  border-top: 1px solid rgba(246, 193, 119, 0.12);
+}
+.celestial-border-b {
+  border-bottom: 1px solid rgba(246, 193, 119, 0.12);
+}
+.celestial-border-l {
+  border-left: 1px solid rgba(246, 193, 119, 0.12);
+}
+.celestial-border-r {
+  border-right: 1px solid rgba(246, 193, 119, 0.12);
+}
+
+/* Subtle ledger dot grid backdrop */
+.celestial-dots {
+  background-image: radial-gradient(rgba(246, 193, 119, 0.04) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Vintage badge detailing */
+.ledger-tag {
+  font-family: monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(246, 193, 119, 0.08);
+  border: 1px solid rgba(246, 193, 119, 0.15);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* Celestial Polaroid Card */
+.polaroid-card {
+  position: relative;
+  background: rgba(12, 10, 32, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(246, 193, 119, 0.15);
+  padding: 16px 16px 40px 16px; /* Wider bottom border like real polaroid */
+  border-radius: 12px;
+  box-shadow: 
+    0 15px 35px rgba(0, 0, 0, 0.6),
+    inset 0 1px 1px rgba(255, 255, 255, 0.08);
+  transition: transform 0.4s var(--ease-emphasis), box-shadow 0.4s var(--ease-emphasis), border-color 0.4s var(--ease-emphasis);
+  will-change: transform;
+}
+
+.polaroid-card:hover {
+  transform: translateY(-8px) scale(1.02) rotate(1deg);
+  border-color: rgba(246, 193, 119, 0.35);
+  box-shadow: 
+    0 25px 50px rgba(0, 0, 0, 0.85),
+    0 0 15px rgba(246, 193, 119, 0.15),
+    inset 0 1px 1px rgba(255, 255, 255, 0.12);
+}
+
+.polaroid-image-wrapper {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  background: var(--surface-lowest);
+}
+
+.polaroid-image {
+  width: 100%;
+  height: 100%;
+  object-cover: cover;
+  transition: transform 0.8s var(--ease-emphasis);
+}
+
+.polaroid-card:hover .polaroid-image {
+  transform: scale(1.06);
+}
+
+/* Vintage photo mounting corners */
+.polaroid-corner {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(246, 193, 119, 0.45);
+  z-index: 10;
+  pointer-events: none;
+  transition: border-color 0.4s var(--ease-emphasis);
+}
+
+.polaroid-card:hover .polaroid-corner {
+  border-color: var(--accent);
+}
+
+.polaroid-corner-tl {
+  top: 12px;
+  left: 12px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.polaroid-corner-tr {
+  top: 12px;
+  right: 12px;
+  border-left: none;
+  border-bottom: none;
+}
+
+.polaroid-corner-bl {
+  bottom: 36px;
+  left: 12px;
+  border-right: none;
+  border-top: none;
+}
+
+.polaroid-corner-br {
+  bottom: 36px;
+  right: 12px;
+  border-left: none;
+  border-top: none;
+}
+
+/* Handwritten polaroid notes */
+.polaroid-handwriting {
+  font-family: var(--font-display), Georgia, serif;
+  font-style: italic;
+  font-weight: 300;
+  color: var(--accent);
+  opacity: 0.9;
+  text-align: center;
+  margin-top: 18px;
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+/* Golden Wax Seal certification */
+.wax-seal-wrapper {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wax-seal {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #f6c177 0%, #d99f4f 100%);
+  box-shadow: 
+    0 8px 24px rgba(0, 0, 0, 0.5),
+    inset 0 2px 4px rgba(255, 255, 255, 0.4),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.5);
+  border: 1px solid #f6c177;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.6s var(--ease-emphasis), box-shadow 0.6s var(--ease-emphasis);
+  position: relative;
+  z-index: 10;
+}
+
+.wax-seal:hover {
+  transform: scale(1.1) rotate(15deg);
+  box-shadow: 
+    0 12px 32px rgba(246, 193, 119, 0.3),
+    inset 0 2px 4px rgba(255, 255, 255, 0.5),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.4);
+}
+
+.wax-seal-ribbon {
+  position: absolute;
+  top: 45px;
+  width: 18px;
+  height: 60px;
+  background: linear-gradient(to bottom, #d99f4f, #120f2c);
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 50% 85%, 0% 100%);
+  z-index: 5;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.wax-seal-ribbon-left {
+  left: 28px;
+  transform: rotate(-12deg);
+}
+
+.wax-seal-ribbon-right {
+  right: 28px;
+  transform: rotate(12deg);
+}
+
+.wax-seal-inner-circle {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  border: 1.5px dashed rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(10, 8, 32, 0.85);
+}
+
+/* Polaroid Fan Stack Carousel */
+.polaroid-stack {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  height: 380px;
+  margin: 0 auto;
+}
+
+.polaroid-stack-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  transition: transform 0.6s var(--ease-emphasis), z-index 0.6s var(--ease-emphasis);
+  will-change: transform;
+}
+
+/* Stacking depths when NOT hovered */
+.polaroid-depth-0 {
+  transform: translate3d(0, 0, 0) rotate(-6deg);
+  z-index: 30;
+}
+.polaroid-depth-1 {
+  transform: translate3d(12px, 8px, 0) rotate(2deg);
+  z-index: 20;
+}
+.polaroid-depth-2 {
+  transform: translate3d(-10px, 16px, 0) rotate(8deg);
+  z-index: 10;
+}
+
+/* Fan out coordinates when parent stack is hovered */
+.polaroid-stack:hover .polaroid-item-0 {
+  transform: translate3d(-50px, -15px, 0) rotate(-15deg);
+}
+.polaroid-stack:hover .polaroid-item-1 {
+  transform: translate3d(15px, -25px, 0) rotate(0deg);
+}
+.polaroid-stack:hover .polaroid-item-2 {
+  transform: translate3d(75px, -5px, 0) rotate(12deg);
+}
+
+/* Hover highlights for individual fanned cards to pull them to the front */
+.polaroid-stack-item:hover {
+  z-index: 50 !important;
+  transform: scale(1.05) translate3d(var(--hover-tx), var(--hover-ty), 0) rotate(var(--hover-rot)) !important;
+}
+
+/* Vintage receipt styled ticket */
+.ticket-dashed-border {
+  border: 1px dashed rgba(246, 193, 119, 0.2);
+  background-image: 
+    radial-gradient(circle at top left, transparent 12px, rgba(246, 193, 119, 0.08) 12px),
+    radial-gradient(circle at top right, transparent 12px, rgba(246, 193, 119, 0.08) 12px),
+    radial-gradient(circle at bottom left, transparent 12px, rgba(246, 193, 119, 0.08) 12px),
+    radial-gradient(circle at bottom right, transparent 12px, rgba(246, 193, 119, 0.08) 12px);
+}
+
+.ticket-dashed-divider {
+  border-top: 1px dashed rgba(246, 193, 119, 0.2);
+}
+
+/* Background collage layers */
+.mood-bg-star-map {
+  position: fixed;
+  top: 10%;
+  right: -5%;
+  width: min(80vw, 650px);
+  height: min(80vw, 650px);
+  z-index: 0;
+  pointer-events: none;
+  background-image: url('/vintage_star_map.png');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  mix-blend-mode: screen;
+  opacity: 0.045; /* subtle glow, filters pure black completely! */
+  will-change: transform;
+}
+
+.mood-bg-moon-chart {
+  position: fixed;
+  top: 48%;
+  left: -8%;
+  width: min(75vw, 550px);
+  height: min(75vw, 550px);
+  z-index: 0;
+  pointer-events: none;
+  background-image: url('/vintage_moon_chart.png');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  mix-blend-mode: screen;
+  opacity: 0.04; /* subtle, filters black, leaving golden outline */
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mood-bg-star-map,
+  .mood-bg-moon-chart {
+    transform: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .mood-bg-star-map {
+    width: min(85vw, 380px);
+    height: min(85vw, 380px);
+    right: -15%;
+    top: 8%;
+    opacity: 0.07; /* perfectly subtle on mobile screens */
+    mask-image: radial-gradient(circle, black 35%, transparent 68%);
+    -webkit-mask-image: radial-gradient(circle, black 35%, transparent 68%);
+  }
+
+  .mood-bg-moon-chart {
+    width: min(80vw, 340px);
+    height: min(80vw, 340px);
+    left: -18%;
+    top: 52%;
+    opacity: 0.06; /* perfectly subtle on mobile screens */
+    mask-image: radial-gradient(circle, black 35%, transparent 68%);
+    -webkit-mask-image: radial-gradient(circle, black 35%, transparent 68%);
+  }
+}
+
+/* Custom premium range slider */
+.premium-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+  width: 100%;
+}
+
+.premium-slider:focus {
+  outline: none;
+}
+
+.premium-slider::-webkit-slider-runnable-track {
+  background: rgba(36, 30, 84, 0.4);
+  border-radius: 4px;
+  height: 4px;
+}
+
+.premium-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: var(--accent);
+  border-radius: 50%;
+  height: 12px;
+  width: 12px;
+  margin-top: -4px; /* centers the thumb */
+  box-shadow: 0 0 8px rgba(246, 193, 119, 0.5);
+  transition: transform 150ms ease;
+}
+
+.premium-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.premium-slider::-moz-range-track {
+  background: rgba(36, 30, 84, 0.4);
+  border-radius: 4px;
+  height: 4px;
+}
+
+.premium-slider::-moz-range-thumb {
+  background-color: var(--accent);
+  border: none;
+  border-radius: 50%;
+  height: 12px;
+  width: 12px;
+  box-shadow: 0 0 8px rgba(246, 193, 119, 0.5);
+  transition: transform 150ms ease;
+}
+
+.premium-slider::-moz-range-thumb:hover {
+  transform: scale(1.2);
+}
+
+
+
